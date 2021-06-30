@@ -4,7 +4,7 @@ import {auth, firebase} from "../services/firebase"
 type User = {
         id: string;
         name: string;
-        avatar: string | null;
+        avatar: string;
     }
   
 type AuthContextType = {
@@ -26,7 +26,7 @@ export function AuthContextProvider(props:AuthContextProviderProps ){
         const unsubscribe =  auth.onAuthStateChanged(user => {
         if(user){
             const {displayName, photoURL, uid } = user
-            if(!displayName) {
+            if(!displayName || !photoURL) {
             throw new Error('Missing information from google Account.');
             }
             setUser({
@@ -48,7 +48,7 @@ export function AuthContextProvider(props:AuthContextProviderProps ){
 
         if (result.user) {
             const {displayName, photoURL, uid } = result.user
-            if(!displayName) {
+            if(!displayName || !photoURL) {
             throw new Error('Missing information from google Account.');
             }
             setUser({
